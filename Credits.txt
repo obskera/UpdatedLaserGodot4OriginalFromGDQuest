@@ -1,0 +1,3 @@
+Credits:
+	- Original code, design, and art assets: `GDQuest and contributors (https://www.gdquest.com/)'
+	- Updated to work in Godot 4.3 (as of August/2024) by SquareBear (twitter: @OmgitsObskera, github: github.com/obskera)

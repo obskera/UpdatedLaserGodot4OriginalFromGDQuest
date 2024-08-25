@@ -1,0 +1,126 @@
+[gd_scene load_steps=11 format=3 uid="uid://cbw0wb8kole7f"]
+
+[ext_resource type="Script" path="res://scripts/laser_beam.gd" id="1_rv18i"]
+[ext_resource type="Texture2D" uid="uid://ccawmfjvq1txk" path="res://assets/laser/glowing_circle.png" id="2_7w2xp"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_drwlk"]
+resource_local_to_scene = true
+
+[sub_resource type="Curve" id="Curve_vxp35"]
+min_value = 0.1
+max_value = 0.5
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.498127, 0.989954), 0.0, 0.0, 0, 0, Vector2(0.764045, 0.015456), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_20wcc"]
+offsets = PackedFloat32Array(0, 0.702247, 0.988764)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3yowb"]
+resource_local_to_scene = true
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_kg13h"]
+resource_local_to_scene = true
+
+[sub_resource type="Curve" id="Curve_1l7u4"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.543689, 10.989), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_07i6e"]
+size = Vector2(50, 162)
+
+[sub_resource type="Environment" id="Environment_2w3gb"]
+background_mode = 3
+background_energy_multiplier = 1.88
+ambient_light_energy = 0.0
+tonemap_exposure = 3.67
+ssil_intensity = 4.65
+sdfgi_energy = 5.0
+glow_enabled = true
+glow_intensity = 4.65
+glow_bloom = 0.06
+glow_hdr_threshold = 0.2
+glow_hdr_scale = 0.91
+glow_hdr_luminance_cap = 54.03
+adjustment_enabled = true
+adjustment_brightness = 0.56
+adjustment_contrast = 1.44
+adjustment_saturation = 3.42
+
+[node name="LaserBeam" type="Node2D"]
+position = Vector2(192, 192)
+script = ExtResource("1_rv18i")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(880, 0)
+
+[node name="Line2D" type="Line2D" parent="RayCast2D"]
+position = Vector2(-5.94118, 0)
+scale = Vector2(0.405882, 1)
+points = PackedVector2Array(14.6377, 0, 803.043, 0)
+default_color = Color(0.443137, 0.890196, 1, 1)
+
+[node name="CastingParticles2D" type="CPUParticles2D" parent="RayCast2D"]
+material = SubResource("CanvasItemMaterial_drwlk")
+position = Vector2(-8, 0)
+emitting = false
+lifetime = 0.3
+randomness = 0.01
+texture = ExtResource("2_7w2xp")
+gravity = Vector2(0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 250.0
+scale_amount_min = 0.1
+scale_amount_max = 1.4
+scale_amount_curve = SubResource("Curve_vxp35")
+color = Color(0.917647, 0.94902, 0.843137, 1)
+color_ramp = SubResource("Gradient_20wcc")
+
+[node name="CollissionParticles2D" type="CPUParticles2D" parent="RayCast2D"]
+material = SubResource("CanvasItemMaterial_3yowb")
+position = Vector2(-8, 0)
+emitting = false
+lifetime = 0.3
+randomness = 0.01
+texture = ExtResource("2_7w2xp")
+gravity = Vector2(0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 250.0
+scale_amount_min = 0.1
+scale_amount_max = 1.4
+scale_amount_curve = SubResource("Curve_vxp35")
+color = Color(0.917647, 0.94902, 0.843137, 1)
+color_ramp = SubResource("Gradient_20wcc")
+
+[node name="BeamParticles2D" type="CPUParticles2D" parent="RayCast2D"]
+material = SubResource("CanvasItemMaterial_kg13h")
+position = Vector2(-8, 0)
+emitting = false
+amount = 22
+lifetime = 0.3
+randomness = 0.01
+texture = ExtResource("2_7w2xp")
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+gravity = Vector2(0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 250.0
+tangential_accel_min = 100.0
+tangential_accel_max = 250.0
+tangential_accel_curve = SubResource("Curve_1l7u4")
+scale_amount_min = 0.1
+scale_amount_max = 0.8
+scale_amount_curve = SubResource("Curve_vxp35")
+color = Color(0.917647, 0.94902, 0.843137, 1)
+color_ramp = SubResource("Gradient_20wcc")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(448, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_07i6e")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2w3gb")
